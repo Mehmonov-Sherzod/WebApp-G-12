@@ -1,4 +1,5 @@
-﻿using WebApp.Application.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using WebApp.Application.Models;
 using WebApp.Application.Models.Subject;
 using WebApp.DataAccess.Persistence;
 using WebApp.Domain.Entities;
@@ -26,10 +27,17 @@ namespace WebApp.Application.Services
 
             return result.Id;
         }
-       
+
         public PaginationResult<SubjectListResponseModel> GetAll(SubjectPageModel model)
         {
-            List<SubjectListResponseModel> subjects = _context.Subjects
+            var query = _context.Subjects.AsQueryable();
+
+            if (!string.IsNullOrEmpty(model.Search))
+            {
+                query = query.Where(s => s.Name.Contains(model.Search));
+            }
+            Console.WriteLine(query.ToQueryString());
+            List<SubjectListResponseModel> subjects = query
                 .Skip(model.PageSize * (model.PageNumber - 1))
                 .Take(model.PageSize)
                 .Select(s => new SubjectListResponseModel
