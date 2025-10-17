@@ -37,7 +37,7 @@ namespace WebApp.Application.Services
                 query = query.Where(s => s.Name.Contains(model.Search));
             }
             Console.WriteLine(query.ToQueryString());
-            List<SubjectListResponseModel> subjects = query
+            List<SubjectListResponseModel> subjects = query 
                 .Skip(model.PageSize * (model.PageNumber - 1))
                 .Take(model.PageSize)
                 .Select(s => new SubjectListResponseModel

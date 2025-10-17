@@ -1,10 +1,19 @@
+using System.ComponentModel;
 using Microsoft.EntityFrameworkCore;
+using WebApp.Application.Models;
 using WebApp.Application.Services;
 using WebApp.DataAccess.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+person1 person1 = new person1();
+person1 person2 = new person1();
+Console.WriteLine(person1 == person2);
+
+
+
+\
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
