@@ -1,14 +1,10 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace WebApp.Application.Models.Subject;
+namespace WebApp.Application.Models;
 
-public class SubjectPageModel
+public class PaginationOption
 {
-    [NotNull]
     public int PageNumber { get; set; }
-
     public int PageSize { get; set; }
-
     public string Search { get; set; }
 }
-

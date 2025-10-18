@@ -28,7 +28,7 @@ namespace WebApp.Application.Services
             return result.Id;
         }
 
-        public PaginationResult<SubjectListResponseModel> GetAll(SubjectPageModel model)
+        public PaginationResult<SubjectListResponseModel> GetAll(PaginationOption model)
         {
             var query = _context.Subjects.AsQueryable();
 

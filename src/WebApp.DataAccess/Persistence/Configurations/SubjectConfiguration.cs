@@ -10,6 +10,9 @@ namespace WebApp.DataAccess.Persistence.Configurations
         {
             builder.Property(s => s.Name)
                 .HasMaxLength(40);
+            //TODO:
+            //Ondelete noaction
         }
+        
     }
 }

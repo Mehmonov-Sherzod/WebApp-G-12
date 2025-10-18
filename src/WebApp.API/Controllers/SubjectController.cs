@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WebApp.Application.Models;
 using WebApp.Application.Models.Subject;
 using WebApp.Application.Services;
 
@@ -23,7 +24,7 @@ public class SubjectController : ControllerBase
     }
 
     [HttpPost("get-all")]
-    public IActionResult GetAll([FromBody] SubjectPageModel model)
+    public IActionResult GetAll([FromBody] PaginationOption model)
     {
         var result = _subjectService.GetAll(model);
 

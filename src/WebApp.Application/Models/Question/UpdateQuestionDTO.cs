@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WebApp.Application.Models.Answer;
 using WebApp.Domain.Enums;
 
-namespace WebApp.Domain.Entities
+namespace WebApp.Application.Models.Question
 {
-    public class Question
+    public class UpdateQuestionDTO
     {
         public int Id { get; set; }
-        public string Title { get; set; }
         public QuestionType Type { get; set; }
+        public string Title { get; set; }
         public int SubjectId { get; set; }
-        public Subject Subject { get; set; }
-        public ICollection<Answer> Answers { get; set; }
+        public List<UpdateAnswers> Answers { get; set; }
     }
 }
