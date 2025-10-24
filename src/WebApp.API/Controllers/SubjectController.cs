@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebApp.Application.Models;
 using WebApp.Application.Models.Subject;
-using WebApp.Application.Services;
+using WebApp.Application.Services.Impl;
 
 namespace WebApp.API.Controllers;
 

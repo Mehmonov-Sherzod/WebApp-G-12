@@ -9,7 +9,7 @@ using WebApp.Application.Models.Question;
 using WebApp.DataAccess.Persistence;
 using WebApp.Domain.Entities;
 
-namespace WebApp.Application.Services
+namespace WebApp.Application.Services.Impl
 {
     public class QuestionService
     {

@@ -2,6 +2,7 @@ using System.ComponentModel;
 using Microsoft.EntityFrameworkCore;
 using WebApp.Application.Models;
 using WebApp.Application.Services;
+using WebApp.Application.Services.Impl;
 using WebApp.DataAccess.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +22,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<QuestionService>();
 builder.Services.AddScoped<SubjectService>();
+builder.Services.AddScoped<ISubjectService , SubjectService>();
 
 builder.Services.AddDbContext<AppDbContext>(opt =>
 {
