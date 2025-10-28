@@ -1,6 +1,4 @@
-using System.ComponentModel;
 using Microsoft.EntityFrameworkCore;
-using WebApp.Application.Models;
 using WebApp.Application.Services;
 using WebApp.Application.Services.Impl;
 using WebApp.DataAccess.Persistence;
@@ -22,14 +20,20 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<QuestionService>();
 builder.Services.AddScoped<SubjectService>();
-builder.Services.AddScoped<ISubjectService , SubjectService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ISubjectService, SubjectService>();
 
 builder.Services.AddDbContext<AppDbContext>(opt =>
 {
     opt.UseNpgsql("Host=localhost;Port=5432;Database=test_app;Username=postgres;Password=Sherzod3466");
 });
 
+
 var app = builder.Build();
+
+using var scope = app.Services.CreateScope();
+AutoMigration.Migrate(scope.ServiceProvider);
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
