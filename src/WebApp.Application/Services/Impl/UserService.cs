@@ -1,4 +1,6 @@
-﻿using WebApp.Application.Models;
+﻿using WebApp.Application.Helpers.GenerateJwt;
+using WebApp.Application.Helpers.PasswordHashers;
+using WebApp.Application.Models;
 using WebApp.Application.Models.User;
 using WebApp.DataAccess.Persistence;
 using WebApp.Domain.Entities;
@@ -8,18 +10,25 @@ namespace WebApp.Application.Services.Impl;
 public class UserService : IUserService
 {
     private readonly AppDbContext _context;
-    public UserService(AppDbContext appContext)
+    public readonly JwtService _jwtService;
+    public readonly PasswordHelper _passwordHelper;
+    public UserService(AppDbContext appContext, JwtService jwtService, PasswordHelper passwordHelper)
     {
         _context = appContext;
+        _jwtService = jwtService;
+        _passwordHelper = passwordHelper;
     }
 
     public Guid Create(CreateUserDTO createUserDTO)
     {
+        string salt = Guid.NewGuid().ToString();
+        string HashPass = _passwordHelper.Incrypt(createUserDTO.Password, salt);
         var result = new User
         {
-            Password = createUserDTO.Password,
+            Email = createUserDTO.Email,
+            Password = HashPass,
             Role = createUserDTO.Role,
-            Salt = Guid.NewGuid().ToString(),
+            Salt = salt,
             Username = createUserDTO.Username
         };
 
@@ -78,5 +87,23 @@ public class UserService : IUserService
         }
 
         return User;
+    }
+
+    public LoginResponseModel LoginAsync(LoginUserModel loginUserModel)
+    {
+        var user = _context.Users.FirstOrDefault(x => x.Email == loginUserModel.Email);
+
+        if (user == null)
+            throw new NotImplementedException("Username or Email is incorrect");
+
+        string token = _jwtService.Generate(user);
+
+        return new LoginResponseModel
+        {
+            Email = user.Email,
+            Username = user.Username,
+            Token = token,
+        };
+
     }
 }

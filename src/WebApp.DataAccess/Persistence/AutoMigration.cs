@@ -7,12 +7,12 @@ namespace WebApp.DataAccess.Persistence
     {
         public static void Migrate(IServiceProvider serviceProvider)
         {
-            var context = serviceProvider.GetRequiredService<AppDbContext>();
+            //var context = serviceProvider.GetRequiredService<AppDbContext>();
 
-            if (context.Database.IsNpgsql())
-            {
-                context.Database.Migrate();
-            }
+            //if (context.Database.IsNpgsql())
+            //{
+            //    context.Database.Migrate();
+            //}
         }
     }
 }

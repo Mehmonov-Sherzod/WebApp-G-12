@@ -11,7 +11,7 @@ using WebApp.Domain.Entities;
 
 namespace WebApp.Application.Services.Impl
 {
-    public class QuestionService
+    public class QuestionService : IQuestionService
     {
         private readonly AppDbContext _context;
         public QuestionService(AppDbContext context)

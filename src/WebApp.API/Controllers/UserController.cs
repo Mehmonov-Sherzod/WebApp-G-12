@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WebApp.Application.Models;
 using WebApp.Application.Models.User;
 using WebApp.Application.Services;
+using WebApp.Application.Services.Impl;
 
 namespace WebApp.API.Controllers;
 
@@ -35,6 +37,14 @@ public class UserController : ControllerBase
     public IActionResult GetById([FromRoute] Guid id)
     {
         var result = _UserService.GetUser(id);
+
+        return Ok(result);
+    }
+
+    [HttpPost("Login")]
+    public  IActionResult LoginAsync(LoginUserModel loginUserModel)
+    {
+        var result =  _UserService.LoginAsync(loginUserModel);
 
         return Ok(result);
     }

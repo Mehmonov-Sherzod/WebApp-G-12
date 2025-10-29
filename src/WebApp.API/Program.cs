@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using WebApp.Application.Helpers.GenerateJwt;
+using WebApp.Application.Helpers.PasswordHashers;
 using WebApp.Application.Services;
 using WebApp.Application.Services.Impl;
 using WebApp.DataAccess.Persistence;
@@ -22,6 +24,8 @@ builder.Services.AddScoped<QuestionService>();
 builder.Services.AddScoped<SubjectService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ISubjectService, SubjectService>();
+builder.Services.AddScoped<PasswordHelper>();
+builder.Services.AddScoped<JwtService>();
 
 builder.Services.AddDbContext<AppDbContext>(opt =>
 {
