@@ -7,7 +7,7 @@ using WebApp.Domain.Entities;
 
 namespace WebApp.Application.Services.Impl;
 
-public class UserService : IUserService
+public partial class UserService : IUserService
 {
     private readonly AppDbContext _context;
     public readonly JwtService _jwtService;
@@ -37,7 +37,6 @@ public class UserService : IUserService
 
         return result.Id;
     }
-
     public PaginationResult<UserListResponseModel> GetAll(PaginationOption model)
     {
         var query = _context.Users.AsQueryable();
@@ -69,7 +68,6 @@ public class UserService : IUserService
             TotalCount = count
         };
     }
-
     public UserResponseModel GetUser(Guid id)
     {
         UserResponseModel? User = _context.Users
@@ -88,7 +86,6 @@ public class UserService : IUserService
 
         return User;
     }
-
     public LoginResponseModel LoginAsync(LoginUserModel loginUserModel)
     {
         var user = _context.Users.FirstOrDefault(x => x.Email == loginUserModel.Email);
@@ -104,6 +101,5 @@ public class UserService : IUserService
             Username = user.Username,
             Token = token,
         };
-
     }
 }

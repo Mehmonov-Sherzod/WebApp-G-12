@@ -11,24 +11,25 @@ namespace WebApp.API.Controllers;
 [Route("api/Users")]
 public class UserController : ControllerBase
 {
-    private readonly IUserService _UserService;
-    public UserController(IUserService UserService)
+    private readonly IUserService _userService;
+    public UserController(IUserService userService)
     {
-        _UserService = UserService;
+        _userService = userService;
     }
 
     [HttpPost]
     public IActionResult PostUser(CreateUserDTO UserDTO)
     {
-        var id = _UserService.Create(UserDTO);
+        var id = _userService.Create(UserDTO);
 
         return Ok(id);
     }
 
+    [Authorize(Roles ="")]
     [HttpPost("get-all")]
     public IActionResult GetAll([FromBody] PaginationOption model)
     {
-        var result = _UserService.GetAll(model);
+        var result = _userService.GetAll(model);
 
         return Ok(result);
     }
@@ -36,7 +37,7 @@ public class UserController : ControllerBase
     [HttpGet("{id:Guid}")]
     public IActionResult GetById([FromRoute] Guid id)
     {
-        var result = _UserService.GetUser(id);
+        var result = _userService.GetUser(id);
 
         return Ok(result);
     }
@@ -44,7 +45,7 @@ public class UserController : ControllerBase
     [HttpPost("Login")]
     public  IActionResult LoginAsync(LoginUserModel loginUserModel)
     {
-        var result =  _UserService.LoginAsync(loginUserModel);
+        var result =  _userService.LoginAsync(loginUserModel);
 
         return Ok(result);
     }

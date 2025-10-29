@@ -30,6 +30,8 @@ namespace WebApp.Application.Helpers.GenerateJwt
 
             var Key = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(_configuration["JwtOption:SecretKey"]));
+
+
             var creds = new SigningCredentials(Key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(

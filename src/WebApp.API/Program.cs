@@ -1,4 +1,8 @@
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using WebApp.Application.Helpers.GenerateJwt;
 using WebApp.Application.Helpers.PasswordHashers;
 using WebApp.Application.Services;
@@ -7,19 +11,65 @@ using WebApp.DataAccess.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var jwtSettings = builder.Configuration.GetSection("JwtOption").Get<JwtOption>();
+
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey)),
+    };
+});
+
 // Add services to the container.
 //person1 person1 = new person1();
 //person1 person2 = new person1();
 //Console.WriteLine(person1 == person2);
-
-
-
 //\
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+// Swagger + JWT
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your Project Name", Version = "v1" });
+
+    var securitySchema = new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme. Example: \"Bearer {token}\"",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        Reference = new OpenApiReference
+        {
+            Type = ReferenceType.SecurityScheme,
+            Id = "Bearer"
+        }
+    };
+
+    c.AddSecurityDefinition("Bearer", securitySchema);
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            securitySchema, new[] { "Bearer" }
+        }
+    });
+});
+
+//builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<QuestionService>();
 builder.Services.AddScoped<SubjectService>();
 builder.Services.AddScoped<IUserService, UserService>();

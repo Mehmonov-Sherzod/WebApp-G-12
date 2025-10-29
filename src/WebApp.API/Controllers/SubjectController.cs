@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WebApp.Application.Models;
 using WebApp.Application.Models.Subject;
 using WebApp.Application.Services.Impl;
@@ -23,6 +24,7 @@ public class SubjectController : ControllerBase
         return Ok(id);
     }
 
+    [Authorize]
     [HttpPost("get-all")]
     public IActionResult GetAll([FromBody] PaginationOption model)
     {
