@@ -27,8 +27,17 @@ public class SubjectService : ISubjectService
         return result.Id;
     }
 
-    public PaginationResult<SubjectListResponseModel> GetAll(PaginationOption model)
+    public Result<PaginationResult<SubjectListResponseModel>> GetAll(PaginationOption model)
     {
+
+        ///validator
+        ///if(!validator.IsValid)
+        ///{
+        //if (true)
+        //{
+        //    return Result<PaginationResult<SubjectListResponseModel>>.Failure(validator.Errors);
+        //}
+        ///}
         var query = _context.Subjects.AsQueryable();
 
         if (!string.IsNullOrEmpty(model.Search))
@@ -48,13 +57,15 @@ public class SubjectService : ISubjectService
 
         int count = _context.Subjects.Count();
 
-        return new PaginationResult<SubjectListResponseModel>
+        var result = new PaginationResult<SubjectListResponseModel>
         {
             Values = subjects,
             PageSize = model.PageSize,
             PageNumber = model.PageNumber,
             TotalCount = count
         };
+
+        return Result<PaginationResult<SubjectListResponseModel>>.Succuss(result);
     }
 
     public SubjectResponseModel GetSubject(int id)

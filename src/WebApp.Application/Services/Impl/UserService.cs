@@ -46,6 +46,11 @@ public partial class UserService : IUserService
             query = query.Where(s => s.Username.Contains(model.Search));
         }
 
+        if (!string.IsNullOrEmpty(model.Search))
+        {
+            query = query.Where(s => s.Username.Contains(model.Search));
+        }
+
         //TODO: add filter for users lisgt based on user role
 
         List<UserListResponseModel> users = query

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using WebApp.Application.Models;
 using WebApp.Application.Models.Subject;
-using WebApp.Application.Services.Impl;
+using WebApp.Application.Services;
 
 namespace WebApp.API.Controllers;
 
@@ -10,8 +10,8 @@ namespace WebApp.API.Controllers;
 [Route("api/subjects")]
 public class SubjectController : ControllerBase
 {
-    private readonly SubjectService _subjectService;
-    public SubjectController(SubjectService subjectService)
+    private readonly ISubjectService _subjectService;
+    public SubjectController(ISubjectService subjectService)
     {
         _subjectService = subjectService;
     }
@@ -28,9 +28,18 @@ public class SubjectController : ControllerBase
     [HttpPost("get-all")]
     public IActionResult GetAll([FromBody] PaginationOption model)
     {
-        var result = _subjectService.GetAll(model);
+        Result<PaginationResult<SubjectListResponseModel>> response =
+            _subjectService.GetAll(model);
 
-        return Ok(result);
+        if (response.IsSuccess)
+        {
+            return Ok(response);
+        }
+        else
+        {
+            return BadRequest(response.Errors);
+        }
+        //var result = Result<PaginationResult<SubjectListResponseModel>>.Succuss(response);
     }
 
     [HttpGet("{id:int}")]
