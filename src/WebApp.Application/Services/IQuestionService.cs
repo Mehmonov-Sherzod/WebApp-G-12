@@ -1,10 +1,12 @@
-﻿using WebApp.Application.Models.Question;
+﻿using WebApp.Application.Models;
+using WebApp.Application.Models.Question;
 
 namespace WebApp.Application.Services
 {
     public interface IQuestionService
     {
-        Task<bool> Create(QuestionCreateDTO questionModel);
-        Task<bool> Update(UpdateQuestionDTO updateQuestionDTO);
+        Task<Result<int>> Create(QuestionCreateDTO questionModel);
+        Task<Result<int>> Update(UpdateQuestionDTO updateQuestionDTO);
+
     }
 }

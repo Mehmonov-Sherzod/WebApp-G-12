@@ -19,9 +19,18 @@ public class SubjectController : ControllerBase
     [HttpPost]
     public IActionResult PostSubject(CreateSubjectDTO subjectDTO)
     {
-        var id = _subjectService.Create(subjectDTO);
+        Result<int> response = _subjectService.Create(subjectDTO);
 
-        return Ok(id);
+        if (response.IsSuccess)
+        {
+           return  Ok(response);
+        }
+        else
+        {
+            return BadRequest(response.Errors);
+        }
+
+            
     }
 
     [Authorize]
@@ -45,8 +54,15 @@ public class SubjectController : ControllerBase
     [HttpGet("{id:int}")]
     public IActionResult GetById([FromRoute] int id)
     {
-        var result = _subjectService.GetSubject(id);
+        Result<SubjectResponseModel> response = _subjectService.GetSubject(id);
 
-        return Ok(result);
+        if (response.IsSuccess)
+        {
+            return Ok(response);
+        }
+        else
+        {
+            return BadRequest(response.Errors);
+        }
     }
 }

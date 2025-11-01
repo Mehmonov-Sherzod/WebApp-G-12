@@ -19,7 +19,7 @@ public partial class UserService : IUserService
         _passwordHelper = passwordHelper;
     }
 
-    public Guid Create(CreateUserDTO createUserDTO)
+    public Result<Guid> Create(CreateUserDTO createUserDTO)
     {
         string salt = Guid.NewGuid().ToString();
         string HashPass = _passwordHelper.Incrypt(createUserDTO.Password, salt);
@@ -35,9 +35,11 @@ public partial class UserService : IUserService
         _context.Users.Add(result);
         _context.SaveChanges();
 
-        return result.Id;
+        var id = result.Id;
+
+        return Result<Guid>.Succuss(id);
     }
-    public PaginationResult<UserListResponseModel> GetAll(PaginationOption model)
+    public Result<PaginationResult<UserListResponseModel>> GetAll(PaginationOption model)
     {
         var query = _context.Users.AsQueryable();
 
@@ -65,15 +67,18 @@ public partial class UserService : IUserService
 
         int count = _context.Users.Count();
 
-        return new PaginationResult<UserListResponseModel>
+        var result =  new PaginationResult<UserListResponseModel>
         {
             Values = users,
             PageSize = model.PageSize,
             PageNumber = model.PageNumber,
             TotalCount = count
         };
+
+        return Result<PaginationResult<UserListResponseModel>>.Succuss(result);
     }
-    public UserResponseModel GetUser(Guid id)
+
+    public Result<UserResponseModel> GetUser(Guid id)
     {
         UserResponseModel? User = _context.Users
             .Where(s => s.Id == id)
@@ -86,25 +91,27 @@ public partial class UserService : IUserService
 
         if (User == null)
         {
-            throw new NotImplementedException();
+            return Result<UserResponseModel>.Failure(new List<string> { "bunday Id li User Yoq" });
         }
 
-        return User;
+        return Result<UserResponseModel>.Succuss(User); ;
     }
-    public LoginResponseModel LoginAsync(LoginUserModel loginUserModel)
+    public Result<LoginResponseModel> LoginAsync(LoginUserModel loginUserModel)
     {
         var user = _context.Users.FirstOrDefault(x => x.Email == loginUserModel.Email);
 
         if (user == null)
-            throw new NotImplementedException("Username or Email is incorrect");
+            return Result<LoginResponseModel>.Failure(new List<string> { "Email Hato" });
 
         string token = _jwtService.Generate(user);
 
-        return new LoginResponseModel
+        var result = new  LoginResponseModel
         {
             Email = user.Email,
             Username = user.Username,
             Token = token,
         };
+
+        return Result<LoginResponseModel>.Succuss(result);
     }
 }

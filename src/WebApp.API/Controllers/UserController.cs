@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.Application.Models;
 using WebApp.Application.Models.User;
@@ -20,33 +21,63 @@ public class UserController : ControllerBase
     [HttpPost]
     public IActionResult PostUser(CreateUserDTO UserDTO)
     {
-        var id = _userService.Create(UserDTO);
+        Result<Guid> Response = _userService.Create(UserDTO);
 
-        return Ok(id);
+        if (Response.IsSuccess)
+        {
+            return Ok(Response);
+        }
+        else
+        {
+            return BadRequest(Response.Errors);
+        }
+
+
     }
 
-    [Authorize(Roles ="")]
+
     [HttpPost("get-all")]
     public IActionResult GetAll([FromBody] PaginationOption model)
     {
-        var result = _userService.GetAll(model);
+        Result<PaginationResult<UserListResponseModel>> response = _userService.GetAll(model);
 
-        return Ok(result);
+        if (response.IsSuccess)
+        {
+            return Ok(Response);
+        }
+        else
+        {
+            return BadRequest(response.Errors);
+        }
     }
 
     [HttpGet("{id:Guid}")]
     public IActionResult GetById([FromRoute] Guid id)
     {
-        var result = _userService.GetUser(id);
+        Result<UserResponseModel> response = _userService.GetUser(id);
 
-        return Ok(result);
+        if (response.IsSuccess)
+        {
+            return Ok(Response);
+        }
+        else
+        {
+            return BadRequest(response.Errors);
+        }
     }
 
     [HttpPost("Login")]
     public  IActionResult LoginAsync(LoginUserModel loginUserModel)
     {
-        var result =  _userService.LoginAsync(loginUserModel);
+        Result<LoginResponseModel> Response = _userService.LoginAsync(loginUserModel);
 
-        return Ok(result);
+        if (Response.IsSuccess)
+        {
+            return Ok(Response);
+        }
+        else
+        {
+            return BadRequest(Response.Errors);
+        }
     }
 }

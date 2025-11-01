@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 using WebApp.Application.Models;
 using WebApp.Application.Models.Subject;
 using WebApp.DataAccess.Persistence;
@@ -14,7 +15,7 @@ public class SubjectService : ISubjectService
         _context = appContext;
     }
 
-    public int Create(CreateSubjectDTO createSubjectDTO)
+    public Result<int> Create(CreateSubjectDTO createSubjectDTO)
     {
         var result = new Subject
         {
@@ -24,7 +25,10 @@ public class SubjectService : ISubjectService
         _context.Subjects.Add(result);
         _context.SaveChanges();
 
-        return result.Id;
+        var id = result.Id;
+
+        return Result<int>.Succuss(id);
+
     }
 
     public Result<PaginationResult<SubjectListResponseModel>> GetAll(PaginationOption model)
@@ -68,7 +72,7 @@ public class SubjectService : ISubjectService
         return Result<PaginationResult<SubjectListResponseModel>>.Succuss(result);
     }
 
-    public SubjectResponseModel GetSubject(int id)
+    public Result<SubjectResponseModel> GetSubject(int id)
     {
         SubjectResponseModel? subject = _context.Subjects
             .Where(s => s.Id == id)
@@ -81,9 +85,12 @@ public class SubjectService : ISubjectService
 
         if (subject == null)
         {
-            throw new NotImplementedException();
+            return Result<SubjectResponseModel>.Failure(new List<string> { "Bunday id li fan yo‘q" });
         }
 
-        return subject;
+
+        var result = subject;
+
+        return Result<SubjectResponseModel>.Succuss(result);
     }
 }

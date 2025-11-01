@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using WebApp.Application.Models;
 using WebApp.Application.Models.Answer;
 using WebApp.Application.Models.Question;
 using WebApp.DataAccess.Persistence;
@@ -18,7 +19,7 @@ namespace WebApp.Application.Services.Impl
         {
             _context = context;
         }
-        public async Task<bool> Create(QuestionCreateDTO questionModel)
+        public async Task<Result<int>> Create(QuestionCreateDTO questionModel)
         {
             Question newQuestion = new Question
             {
@@ -35,7 +36,8 @@ namespace WebApp.Application.Services.Impl
             };
             await _context.Questions.AddAsync(newQuestion);
             await _context.SaveChangesAsync();
-            return true;
+
+            return Result<int>.Succuss(questionModel.SubjectId);
             //Question newQuestion = new Question
             //{
             //    Type = questionModel.Type,
@@ -56,7 +58,7 @@ namespace WebApp.Application.Services.Impl
             //    newQuestion.Answers.Add(answer);
             //}
         }
-        public async Task<bool> Update(UpdateQuestionDTO updateQuestionDTO) 
+        public async Task<Result<int>> Update(UpdateQuestionDTO updateQuestionDTO) 
         {
             var storage = await _context.Questions
                                 .Where(x=>x.Id==updateQuestionDTO.Id)
@@ -80,7 +82,7 @@ namespace WebApp.Application.Services.Impl
             }
             _context.Questions.Update(storage);
             await _context.SaveChangesAsync();
-            return true;
+            return Result<int>.Succuss(updateQuestionDTO.SubjectId);
         }
 
     }

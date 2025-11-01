@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using WebApp.Application.Models;
 using WebApp.Application.Models.Question;
 using WebApp.Application.Services.Impl;
 
@@ -18,14 +19,31 @@ namespace WebApp.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(QuestionCreateDTO newQuestion)
         {
-            bool checker = await _service.Create(newQuestion);
-            return Ok();    
+            Result<int> response = await _service.Create(newQuestion);
+
+            if (response.IsSuccess)
+            {
+                return Ok(response);
+            }
+            else
+            {
+                return BadRequest(response.Errors);
+            }
         }
+
         [HttpPut]
         public async Task<IActionResult> Update(UpdateQuestionDTO question)
         {
-            bool checker = await _service.Update(question);
-            return Ok();
+            Result<int> response = await _service.Update(question);
+
+            if (response.IsSuccess)
+            {
+                return Ok(response);
+            }
+            else
+            {
+                return BadRequest(response.Errors);
+            }
         }
     }
 }

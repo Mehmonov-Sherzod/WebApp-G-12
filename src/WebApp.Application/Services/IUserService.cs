@@ -5,8 +5,8 @@ namespace WebApp.Application.Services;
 
 public interface IUserService
 {
-    Guid Create(CreateUserDTO createUserDTO);
-    LoginResponseModel LoginAsync(LoginUserModel loginUserModel);
-    PaginationResult<UserListResponseModel> GetAll(PaginationOption model);
-    UserResponseModel GetUser(Guid id);
+    Result<Guid> Create(CreateUserDTO createUserDTO);
+    Result<LoginResponseModel> LoginAsync(LoginUserModel loginUserModel);
+    Result<PaginationResult<UserListResponseModel>> GetAll(PaginationOption model);
+    Result<UserResponseModel> GetUser(Guid id);
 }

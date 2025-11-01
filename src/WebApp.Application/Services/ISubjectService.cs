@@ -5,7 +5,7 @@ namespace WebApp.Application.Services;
 
 public interface ISubjectService
 {
-    int Create(CreateSubjectDTO createSubjectDTO);
+    Result<int> Create(CreateSubjectDTO createSubjectDTO);
     Result<PaginationResult<SubjectListResponseModel>> GetAll(PaginationOption model);
-    SubjectResponseModel GetSubject(int id);
+    Result<SubjectResponseModel> GetSubject(int id);
 }
