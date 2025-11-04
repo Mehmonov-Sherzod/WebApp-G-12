@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using WebApp.API.Middleware;
+using WebApp.Application.Common;
 using WebApp.Application.Helpers.GenerateJwt;
 using WebApp.Application.Helpers.PasswordHashers;
 using WebApp.Application.Services;
@@ -11,8 +12,11 @@ using WebApp.Application.Services.Impl;
 using WebApp.DataAccess.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
+var configuration = builder.Configuration;
 
 var jwtSettings = builder.Configuration.GetSection("JwtOption").Get<JwtOption>();
+
+builder.Services.Configure<EmailConfiguration>(configuration.GetSection("EmailConfiguration"));
 
 
 builder.Services.AddAuthentication(options =>
@@ -70,6 +74,9 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+
 //builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<QuestionService>();
 builder.Services.AddScoped<SubjectService>();
@@ -77,10 +84,12 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ISubjectService, SubjectService>();
 builder.Services.AddScoped<PasswordHelper>();
 builder.Services.AddScoped<JwtService>();
+builder.Services.AddScoped<IOtpService, OtpService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 builder.Services.AddDbContext<AppDbContext>(opt =>
 {
-    opt.UseNpgsql("Host=localhost;Port=5432;Database=test_app;Username=postgres;Password=Sherzod3466");
+    opt.UseNpgsql("Host=localhost;Port=5432;Database=Test-App;Username=postgres;Password=Sherzod3466");
 });
 
 

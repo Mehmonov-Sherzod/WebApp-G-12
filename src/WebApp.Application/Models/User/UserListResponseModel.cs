@@ -4,7 +4,7 @@ namespace WebApp.Application.Models.User;
 
 public class UserListResponseModel
 {
-    public Guid Id { get; set; }
+    public int Id { get; set; }
     public string Username { get; set; }
     public Role Role { get; set; }
 }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.Application.Models;
 using WebApp.Application.Models.User;
+using WebApp.Application.Models.UserEmail;
 using WebApp.Application.Services;
 using WebApp.Application.Services.Impl;
 
@@ -21,7 +22,7 @@ public class UserController : ControllerBase
     [HttpPost]
     public IActionResult PostUser(CreateUserDTO UserDTO)
     {
-        Result<Guid> Response = _userService.Create(UserDTO);
+        Result<int> Response = _userService.Create(UserDTO);
 
         if (Response.IsSuccess)
         {
@@ -34,7 +35,6 @@ public class UserController : ControllerBase
 
 
     }
-
 
     [HttpPost("get-all")]
     public IActionResult GetAll([FromBody] PaginationOption model)
@@ -52,7 +52,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("{id:Guid}")]
-    public IActionResult GetById([FromRoute] Guid id)
+    public IActionResult GetById([FromRoute] int id)
     {
         Result<UserResponseModel> response = _userService.GetUser(id);
 
@@ -70,6 +70,51 @@ public class UserController : ControllerBase
     public  IActionResult LoginAsync(LoginUserModel loginUserModel)
     {
         Result<LoginResponseModel> Response = _userService.LoginAsync(loginUserModel);
+
+        if (Response.IsSuccess)
+        {
+            return Ok(Response);
+        }
+        else
+        {
+            return BadRequest(Response.Errors);
+        }
+    }
+
+    [HttpPost("send-otp")]
+    public IActionResult LoginAsync(UserSendOtp userSendOtp)
+    {
+        Result<bool> Response = _userService.SendOtp(userSendOtp);
+
+        if (Response.IsSuccess)
+        {
+            return Ok(Response);
+        }
+        else
+        {
+            return BadRequest(Response.Errors);
+        }
+    }
+
+    [HttpPost("forgot-password")]
+    public IActionResult ForgotPassword(UserEmailForgot userEmailForgot)
+    {
+        Result<string> Response = _userService.ForgotPassword(userEmailForgot);
+
+        if (Response.IsSuccess)
+        {
+            return Ok(Response);
+        }
+        else
+        {
+            return BadRequest(Response.Errors);
+        }
+    }
+
+    [HttpDelete("{id}")]
+    public IActionResult DeleteById(int id)
+    {
+        Result<string> Response = _userService.DeleteUser(id);
 
         if (Response.IsSuccess)
         {
