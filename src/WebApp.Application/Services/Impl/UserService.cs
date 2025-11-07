@@ -39,6 +39,7 @@ public partial class UserService : IUserService
         {
             Username = createUserDTO.Username,
             Email = createUserDTO.Email,
+            PhoneNumber = createUserDTO.PhoneNumber,
             Password = HashPass,
             Salt = salt,
             Role = createUserDTO.Role,
@@ -138,6 +139,7 @@ public partial class UserService : IUserService
 
         user.Username = updateUserModel.Username;
         user.Email = updateUserModel.Email;
+        user.PhoneNumber = updateUserModel.PhoneNumber;
 
         _context.SaveChanges();
 

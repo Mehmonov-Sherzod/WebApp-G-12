@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Telegram.Bot;
 using WebApp.API.Middleware;
 using WebApp.Application.Common;
 using WebApp.Application.Helpers.GenerateJwt;
@@ -13,6 +14,12 @@ using WebApp.DataAccess.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
+
+builder.Services.AddSingleton<ITelegramBotClient>(sp =>
+{
+    var token = builder.Configuration["TelegramBot:Token"];
+    return new TelegramBotClient(token);
+});
 
 var jwtSettings = builder.Configuration.GetSection("JwtOption").Get<JwtOption>();
 
@@ -36,11 +43,6 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// Add services to the container.
-//person1 person1 = new person1();
-//person1 person2 = new person1();
-//Console.WriteLine(person1 == person2);
-//\
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -51,7 +51,7 @@ public class UserController : ControllerBase
         }
     }
 
-    [HttpGet("{id:Guid}")]
+    [HttpGet("{id}")]
     public IActionResult GetById([FromRoute] int id)
     {
         Result<UserResponseModel> response = _userService.GetUser(id);
@@ -113,6 +113,8 @@ public class UserController : ControllerBase
 
     [HttpDelete("{id}")]
     public IActionResult DeleteById(int id)
+
+
     {
         Result<string> Response = _userService.DeleteUser(id);
 
