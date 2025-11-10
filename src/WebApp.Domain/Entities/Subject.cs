@@ -12,5 +12,7 @@ namespace WebApp.Domain.Entities
         public string Name { get; set; }
         public ICollection<Section> Sections { get; set; }
         public ICollection<Question> Questions { get; set; }
+
+        public List<SubjectTranslate> subjectTranslates { get; set; }
     }
 }

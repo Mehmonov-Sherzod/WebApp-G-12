@@ -20,6 +20,14 @@ public class SubjectService : ISubjectService
         var result = new Subject
         {
             Name = createSubjectDTO.Name,
+            subjectTranslates = createSubjectDTO.SubjectTranslates
+            .Select(x => new SubjectTranslate
+            {
+                LanguageId = x.LanguageId,
+                ColumnName = x.ColumnName,
+                TranslateText = x.TranslateText,
+
+            }).ToList()
         };
 
         _context.Subjects.Add(result);

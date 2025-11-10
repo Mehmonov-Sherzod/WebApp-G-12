@@ -16,6 +16,7 @@ namespace WebApp.DataAccess.Persistence
             public DbSet<Answer> Answers { get; set; }
             public DbSet<User> Users { get; set; }
             public DbSet<UserOTPs> userOTPs { get; set; }
+            public DbSet<SubjectTranslate> subjectTranslates { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
